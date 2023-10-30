@@ -1,1 +1,1 @@
-dotenv == 1.0.0
+dotenv
