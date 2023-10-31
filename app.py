@@ -1,10 +1,12 @@
 import os
-# from langchain import PromptTemplate, LLMChain
 import requests
 import streamlit as st
 
-# from dotenv import load_dotenv
+# create a .env file in your project directory and add your hugging face token as:
+# HF_API_KEY = "hf_your_token"
+# after that uncomment below two lines of code to load the hf api token
 
+# from dotenv import load_dotenv
 # load_dotenv()
 
 API_KEY = os.getenv('HF_API_KEY')
@@ -77,12 +79,40 @@ def imageToStory():
 	st.set_page_config(page_title = "Photo to story", page_icon="👾")
 	# emoji shortcut: CTRL + CMD + Space
 
+	#Removing the Menu Button and Streamlit Icon
+	hide_default_format = """
+       <style>
+       #MainMenu {visibility: hidden; }
+       footer {visibility: hidden;}
+       </style>
+       """
+	st.markdown(hide_default_format, unsafe_allow_html=True)
+
 	st.title("Photo to story")
 	st.header("Turn your photos into a beautiful story")
 	st.subheader("Bored of your regular photos...I have a solution for you. Turn your most favourite photos into a \
 					beautiful story. Just browse your photo and hit enter and see the magic 🪄")
+	st.subheader("Don't worry about your privacy! This app doesn't store anything. Your photo is deleted \
+					right after the story is generated🔐")
 
-	uploaded_file = st.file_uploader("choose your photo...", type = "jpg"or"png")
+	# sidebar
+	app_tech_stack = "**LLM** :  falcon-7b-instruct"
+	how_it_works = "Firstly, it creates a suitable caption for the image uploaded by the user and then \
+					it uses a **LLM, falcon-7b,** to create a practical and short story by taking the image caption as context."
+	linkedin = "https://www.linkedin.com/in/priyansh-bhardwaj-25964317a"
+	about_developer = "Priyansh Bhardwaj"
+
+	with st.sidebar.expander("Tech stack"):
+		st.write(app_tech_stack)
+	
+	with st.sidebar.expander("App Working"):
+		st.write(how_it_works)
+	
+	with st.sidebar.expander("About me"):
+		st.write(about_developer)
+		st.write("[LinkedIn](%s)" %linkedin)
+
+	uploaded_file = st.file_uploader("choose your photo...", type = ["jpg","png"])
 
 	if uploaded_file is not None:
 		bytes_data = uploaded_file.getvalue()
@@ -92,18 +122,20 @@ def imageToStory():
 			file.write(bytes_data)
 		st.image(uploaded_file, caption="Photo successfully uploaded", use_column_width=True)
 
-		if st.button("Expecto Conversionum 🧙🪄", type="primary"):
+		if st.button("Generate Story🪄",
+					type="primary",
+					help="Click this button to generate a story from your photo"):
 
 			caption = image_to_text(image_path)
 			story = generateStory(caption)
 
-			#deleting the imagesß
+			#deleting the images
 			for image in os.listdir("images/"):
 				file_path = os.path.join("images/", image) 
 				os.remove(file_path)
 
-			with st.expander("Photo caption"):
-				st.write(caption)
+			# with st.expander("Photo caption"):
+			# 	st.write(caption)
 			with st.expander("Story"):
 				st.write(story)
 		
