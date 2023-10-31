@@ -37,7 +37,7 @@ def generateStory(inputText):
 
 	API_URL = falcon_7b
 
-	falcon_text_for_story = f"create a positive, real, practical and short story from this context {inputText}"
+	falcon_text_for_story = f"create a positive, real, practical and short story from this context {inputText}."
 
 	payload = {
 				"inputs": falcon_text_for_story,
@@ -136,8 +136,8 @@ def imageToStory():
 
 			# with st.expander("Photo caption"):
 			# 	st.write(caption)
-			with st.expander("Story"):
-				st.write(story)
+			# with st.expander("Story"):
+			st.write(story)
 		
 
 if __name__ == "__main__":
