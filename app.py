@@ -25,11 +25,19 @@ def image_to_text(image_source):
 
 	response = requests.post(API_URL, headers=headers, data=data)
 	response =  response.json()
-	
-	return response[0]["generated_text"]
+
+	#error handling
+	try:
+		return response[0]["generated_text"]
+	except:
+		return "error"
 
 
 def generateStory(inputText):
+	# print(inputText)
+	#handling error of image_to_text model
+	if inputText == "error":
+		return "Please accept our apology as an error has been occured in the server. Please wait for a while!!"
 	# gpt2_xl = "https://api-inference.huggingface.co/models/gpt2-xl"
 
 	#using "falcon 7b instruct" as it is working way better than gpt2 for creating stories
@@ -63,16 +71,14 @@ def generateStory(inputText):
 	# print(type(response))
 	# print(response,"\n\n")
 
-	# {'error': 'Model gpt2-large is currently loading', 'estimated_time': 129.88461303710938} 
-	# {'error': 'Internal Server Error'} 
+	# response = {'error': 'Model gpt2-large is currently loading', 'estimated_time': 129.88461303710938} 
+	# response = {'error': 'Internal Server Error'}
 
 	#  error handling
-	if isinstance(response, dict):
-		# print(response["error"], "\n\n")
-		return response["error"]
-
-	else:
+	try:
 		return response[0]["generated_text"]
+	except:
+		return "Please accept our apology as an error has been occured in the server. Please wait for a while!!"
 
 
 def imageToStory():
