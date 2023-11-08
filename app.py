@@ -51,7 +51,7 @@ def generateStory(inputText):
 				"inputs": falcon_text_for_story,
 				"parameters": {
 								# "max_length": 2,
-								"max_new_tokens": 200,
+								"max_new_tokens": 250,
 								"do_sample":True,
 								# "max_time": 15.00,
 								"top_k": 10,		#total words in text
@@ -102,20 +102,35 @@ def imageToStory():
 					right after the story is generated🔐")
 
 	# sidebar
-	app_tech_stack = "**LLM** :  falcon-7b-instruct"
-	how_it_works = "Firstly, it creates a suitable caption for the image uploaded by the user and then \
-					it uses a **LLM, falcon-7b,** to create a practical and short story by taking the image caption as context."
+	
 	linkedin = "https://www.linkedin.com/in/priyansh-bhardwaj-25964317a"
-	about_developer = "Priyansh Bhardwaj"
+	about_developer = "**Priyansh Bhardwaj**"
 
-	with st.sidebar.expander("Tech stack"):
-		st.write(app_tech_stack)
+	#tech stack
+	with st.sidebar.expander("**Tech stack**"):
+		st.write('''
+			- **LLM : falcon-7b-instruct**
+			- **HuggingFace**'''
+				)
 	
-	with st.sidebar.expander("App Working"):
-		st.write(how_it_works)
+	#app working
+	with st.sidebar.expander("**App Working**"):
+		st.write('''
+			**Photo to Story: Transform Your Photos into Captivating Narratives with Ease.**
+			''')
+		st.write('''
+			- **Upload Your Photo:** Select any photo that sparks your imagination.
+			- **Caption Generation:** We employ a Hugging Face model to generate a suitable caption for your image. This step sets the stage for your story.
+			- **Falcon 7B Unleashed:** With the generated caption in hand, we turn to Falcon 7B, our powerful large language model. It takes your caption and transforms it into a real, interesting, and short story.
+			- **Enjoy Your Story:** Your photo is now more than just an image; it's a doorway to a unique narrative experience.
+			- **Privacy Priority:** We respect your privacy. Your uploaded photos are used solely for caption generation and are promptly deleted after the process is complete.
+		''')
+		st.write("Unlock the power of 'Photo to Story' and let your pictures speak volumes with intriguing tales. Your memories will never look the same.")
 	
-	with st.sidebar.expander("About me"):
+	#about me
+	with st.sidebar.expander("**About me**"):
 		st.write(about_developer)
+		st.write("[Website](https://priyansh-portfolio.streamlit.app/)")
 		st.write("[LinkedIn](%s)" %linkedin)
 
 	uploaded_file = st.file_uploader("choose your photo...", type = ["jpg","png"])
@@ -131,9 +146,10 @@ def imageToStory():
 		if st.button("Generate Story🪄",
 					type="primary",
 					help="Click this button to generate a story from your photo"):
-
-			caption = image_to_text(image_path)
-			story = generateStory(caption)
+			
+			with st.spinner('Generating Story'):
+				caption = image_to_text(image_path)
+				story = generateStory(caption)
 
 			#deleting the images
 			for image in os.listdir("images/"):
