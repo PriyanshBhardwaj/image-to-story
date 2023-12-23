@@ -29,7 +29,9 @@ def image_to_text(image_source):
 	#error handling
 	try:
 		return response[0]["generated_text"]
-	except:
+	except Exception as e:
+		# print(e)
+		# print(f"\n\n{str(e)}\n\n")
 		return "error"
 
 
@@ -77,7 +79,9 @@ def generateStory(inputText):
 	#  error handling
 	try:
 		return response[0]["generated_text"]
-	except:
+	except Exception as e:
+		# print(e)
+		# print(f"\n\n{str(e)}\n\n")
 		return "Please accept our apology as an error has been occured in the server. Please wait for a while!!"
 
 
@@ -110,7 +114,8 @@ def imageToStory():
 	with st.sidebar.expander("**Tech stack**"):
 		st.write('''
 			- **LLM : falcon-7b-instruct**
-			- **HuggingFace**'''
+			- **HuggingFace**
+			- **Langchain**'''
 				)
 	
 	#app working
@@ -149,7 +154,9 @@ def imageToStory():
 			
 			with st.spinner('Generating Story'):
 				caption = image_to_text(image_path)
+				# print(f"\n\ncaption: {caption}\n\n")
 				story = generateStory(caption)
+				# print(f"\n\nstory: {story}\n\n")
 
 			#deleting the images
 			for image in os.listdir("images/"):
@@ -159,6 +166,8 @@ def imageToStory():
 			# with st.expander("Photo caption"):
 			# 	st.write(caption)
 			# with st.expander("Story"):
+
+			# st.write(caption)
 			st.write(story)
 		
 
